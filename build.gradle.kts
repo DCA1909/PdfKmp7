@@ -1,3 +1,5 @@
+import org.gradle.plugins.signing.Sign
+
 plugins {
     alias(libs.plugins.kotlinMultiplatform) apply false
     alias(libs.plugins.compose.compiler) apply false
@@ -20,9 +22,13 @@ dependencies {
 dokka {
     moduleName.set("PdfKmp")
 }
-tasks.withType<Sign>().configureEach {
-    onlyIf {
-        System.getenv("JITPACK") == null ||
-            System.getenv("JITPACK") != "true"
+
+// Allow skipping publication signing when explicitly requested.
+// Example: ./gradlew publish -PskipSigning=true
+subprojects {
+    tasks.withType<Sign>().configureEach {
+        onlyIf {
+            providers.gradleProperty("skipSigning").orNull != "true"
+        }
     }
 }
