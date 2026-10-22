@@ -35,24 +35,6 @@ kotlin {
     // platform-specific code.
     jvm()
 
-    // iosX64 dropped to match :pdfkmp-compose-resources — Compose
-    // Multiplatform 1.11.0 removed the Intel-Mac-simulator target, so the
-    // companion modules align on iosArm64 + iosSimulatorArm64 only.
-    listOf(
-        iosArm64(),
-        iosSimulatorArm64(),
-    ).forEach {
-        it.binaries.framework {
-            baseName = "PdfKmpMarkdown"
-            isStatic = true
-        }
-    }
-
-    // Web (Kotlin/Wasm) — the module is pure common Kotlin, so it rides the
-    // core's wasm backend for free. nodejs() only selects the test runner.
-    wasmJs {
-        nodejs()
-    }
 
     sourceSets {
         commonMain.dependencies {

@@ -133,28 +133,7 @@ kotlin {
     // every desktop OS without bundling native libraries.
     jvm()
 
-    // iosX64 (Intel-Mac simulator) was dropped in 1.1.0: Compose Multiplatform
-    // 1.11.0 removed the target from its own modules, and Intel Macs are EOL.
-    // Apple-Silicon simulators use iosSimulatorArm64; devices use iosArm64.
-    listOf(
-        iosArm64(),
-        iosSimulatorArm64(),
-    ).forEach {
-        it.binaries.framework {
-            baseName = "PdfKmp"
-            isStatic = true
-        }
-    }
 
-    // Web (Kotlin/Wasm). Browsers expose no PDF-writing API to Wasm, so this
-    // target renders through the pure-Kotlin `kmpwriter` backend (Standard-14
-    // Helvetica, vector everything, JPEG/PNG passthrough). The published klib
-    // is environment-agnostic — consumers use it from browser apps; nodejs()
-    // here only selects where the library's own tests execute (Node downloads
-    // automatically, no Chrome/karma needed on CI or Windows).
-    wasmJs {
-        nodejs()
-    }
 
     sourceSets {
         commonMain {

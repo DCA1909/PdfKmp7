@@ -45,18 +45,6 @@ kotlin {
     // on-screen preview, mirroring Android's PdfRenderer and iOS's PDFKit.
     jvm()
 
-    // iosX64 dropped in 1.1.0 — Compose Multiplatform 1.11.0 removed the
-    // Intel-Mac-simulator target from its own modules (this module depends on
-    // Compose), so it can no longer be published here either.
-    listOf(
-        iosArm64(),
-        iosSimulatorArm64(),
-    ).forEach {
-        it.binaries.framework {
-            baseName = "PdfKmpViewer"
-            isStatic = true
-        }
-    }
 
     sourceSets {
         commonMain.dependencies {

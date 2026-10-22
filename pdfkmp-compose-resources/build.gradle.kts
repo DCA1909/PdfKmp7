@@ -35,39 +35,7 @@ kotlin {
     // `components-resources` supplies the resource-loading APIs.
     jvm()
 
-    // iosX64 dropped in 1.1.0 — Compose Multiplatform 1.11.0 removed the
-    // Intel-Mac-simulator target from its own modules (this module depends on
-    // components-resources), so it can no longer be published here either.
-    listOf(
-        iosArm64(),
-        iosSimulatorArm64(),
-    ).forEach {
-        it.binaries.framework {
-            baseName = "PdfKmpComposeResources"
-            isStatic = true
-        }
-    }
 
-    // Web (Kotlin/Wasm) — pure common code over the core's wasm backend;
-    // components-resources ships a wasmJs variant since Compose 1.7.
-    wasmJs {
-        nodejs()
-    }
-
-    sourceSets {
-        commonMain.dependencies {
-            api(project(":pdfkmp"))
-            api(libs.compose.components.resources)
-        }
-
-        commonTest.dependencies {
-            implementation(kotlin("test"))
-        }
-
-        compilerOptions {
-            freeCompilerArgs.add("-Xexpect-actual-classes")
-        }
-    }
 }
 
 mavenPublishing {
