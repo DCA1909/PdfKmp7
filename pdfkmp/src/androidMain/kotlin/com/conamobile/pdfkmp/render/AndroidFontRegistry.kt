@@ -1,6 +1,7 @@
 package com.conamobile.pdfkmp.render
 
 import android.graphics.Typeface
+import android.os.Build
 import android.os.ParcelFileDescriptor
 import android.os.Process
 import com.conamobile.pdfkmp.PdfLog
@@ -93,10 +94,18 @@ internal class AndroidFontRegistry(private val cacheDir: File) {
         var failure: Exception? = null
         val typeface = try {
             tempFile.writeBytes(bytes)
-            ParcelFileDescriptor.open(tempFile, ParcelFileDescriptor.MODE_READ_ONLY)
-                .use { pfd ->
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                // Android 8.0 及以上：沿用原来的实现
+                ParcelFileDescriptor.open(
+                    tempFile,
+                    ParcelFileDescriptor.MODE_READ_ONLY
+                ).use { pfd ->
                     Typeface.Builder(pfd.fileDescriptor).build()
                 }
+            } else {
+                // Android 7.1 及以下：使用旧 API
+                Typeface.createFromFile(tempFile)
+            }
         } catch (e: Exception) {
             // Two very different failures land here — a full cache partition
             // (IOException from writeBytes) and a malformed font (Builder).
