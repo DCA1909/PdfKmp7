@@ -36,6 +36,20 @@ kotlin {
     jvm()
 
 
+    sourceSets {
+        commonMain.dependencies {
+            api(project(":pdfkmp"))
+            api(libs.compose.components.resources)
+        }
+
+        commonTest.dependencies {
+            implementation(kotlin("test"))
+        }
+
+        compilerOptions {
+            freeCompilerArgs.add("-Xexpect-actual-classes")
+        }
+    }
 }
 
 mavenPublishing {
