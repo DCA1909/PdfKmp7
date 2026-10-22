@@ -20,3 +20,9 @@ dependencies {
 dokka {
     moduleName.set("PdfKmp")
 }
+tasks.withType<Sign>().configureEach {
+    onlyIf {
+        System.getenv("JITPACK") == null ||
+            System.getenv("JITPACK") != "true"
+    }
+}
